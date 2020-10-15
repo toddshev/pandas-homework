@@ -1,8 +1,50 @@
-class Finhelper:
-    def __init__(self):
+   class fh: #fin helper
+ #   def __init__():
+        def load_and_clean(in_path):
+            df = pd.read_csv(in_path, index_col = 0, parse_dates = True, infer_datetime_format = True)
+            df.dropna(inplace = True)
+            df.drop_duplicates(inplace = True)
+            return df
 
-        def load_and_clean_me(self,in_path):
-            in_file = pd.read_csv(in_path, index_col = 0, parse_dates = True, infer_datetime_format = True)
-            in_file.dropna(inplace = True)
-            in_file.drop_duplicates(inplace = True)
-            return in_file
+        def get_cov(df, tick, ind):
+            #return covariance from dataframe, ticker, and index
+            cov= df[tick].cov(df[ind])
+            return cov
+    
+        def get_corr(df):
+            return df.corr()
+        
+        def get_beta(df,tick,ind):
+            #get beta from dataframe, ticker, and index, uses get_cov
+            cov = get_cov(df,tick,ind)
+            var = df[ind].var()
+            beta = cov / var
+            return beta
+
+        def get_sharpe(df, df_type):
+            #df_type should be either "price" or "returns" based on dataframe passed in
+            if df_type == "price":
+                df = df.pct_change(inplace = True)
+            sharpe = (df.mean() * 252) / (df.std() * np.sqrt(252))
+            return sharp
+        
+        def get_volatility(df):
+            #annualized standard deviation
+            return df.std() * np.sqrt(252)
+        
+        def allocate(weights, df):
+            #weighted portfolio, weights must be a list of same count as assets
+            return df.dot(weights)
+        
+        def get_cum_returns(df, init_inv = 1):
+            #dataframe must be daily_returns.  Optional investment amount as 2nd arg
+            return ((1 + df).cumprod()) * init_inv
+        
+        def drop():
+            #returns help text...thought I'd try this out
+            return f"dataframe.drop(columns=['column1', 'column2', 'column3'], inplace=True)"
+            #return "Hello"
+        def get_rolling(df, days):
+            #returns rolling average
+            return df.rolling(window=days).mean()
+
